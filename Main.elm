@@ -4,8 +4,8 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Process
 import Random exposing (Seed)
-import Task
-import Time
+import Task exposing (Task)
+import Time exposing (Time)
 
 
 main : Program Never Model Msg
@@ -34,10 +34,22 @@ init : ( Model, Cmd Msg )
 init =
     ( ( 100, 100 )
     , Time.now
-        |> Task.map (\time -> Random.initialSeed (round time))
-        |> Task.andThen (\seed -> Process.sleep 2000 |> Task.map (always seed))
+        |> Task.map timeToSeed
+        |> Task.andThen pause
         |> Task.perform NewPosition
     )
+
+
+timeToSeed : Time -> Seed
+timeToSeed time =
+    round time
+        |> Random.initialSeed
+
+
+pause : Seed -> Task x Seed
+pause seed =
+    Process.sleep 2000
+        |> Task.map (\_ -> seed)
 
 
 
