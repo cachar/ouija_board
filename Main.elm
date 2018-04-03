@@ -18,6 +18,18 @@ main =
         }
 
 
+
+-- MODEL
+
+
+type alias Model =
+    ( Int, Int )
+
+
+
+-- INIT
+
+
 init : ( Model, Cmd Msg )
 init =
     ( ( 100, 100 )
@@ -28,13 +40,8 @@ init =
     )
 
 
-type alias Model =
-    ( Int, Int )
 
-
-randomPosition : Seed -> Cmd Msg
-randomPosition seed =
-    Task.perform (\_ -> NewPosition seed) (Process.sleep 2000)
+-- UPDATE
 
 
 type Msg
@@ -52,6 +59,15 @@ update msg model =
             ( newModel
             , randomPosition newSeed
             )
+
+
+randomPosition : Seed -> Cmd Msg
+randomPosition seed =
+    Task.perform (\_ -> NewPosition seed) (Process.sleep 2000)
+
+
+
+-- VIEW
 
 
 view : Model -> Html Msg
